@@ -24,19 +24,33 @@ body.light{
 *{box-sizing:border-box}
 body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
 .wrap{max-width:960px;margin:0 auto;padding:24px 16px 64px}
-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--border);margin-bottom:22px}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:18px}
 .kicker{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
-h1{margin:4px 0 0;font-size:26px;letter-spacing:-.3px}
-.sub{margin:4px 0 0;font-size:14px;color:var(--muted)}
+h1{margin:4px 0 0;font-size:25px;letter-spacing:-.3px}
+.sub{margin:4px 0 0;font-size:13.5px;color:var(--muted)}
+.summary{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.pwrap{flex:1;min-width:220px}
+.pmeta{display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:6px}
+.pbar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;border:1px solid var(--border)}
+.pbar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--ok));transition:width .25s}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.fbtn{padding:6px 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface-2);color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer}
+.fbtn.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);text-decoration:none;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .15s}
 .btn:hover{border-color:var(--border-hi);transform:translateY(-1px)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.primary:hover{filter:brightness(1.06)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;transition:border-color .15s}
-.card:hover{border-color:var(--border-hi)}
+.card.todo{border-color:rgba(229,164,70,.55);box-shadow:0 0 0 1px rgba(229,164,70,.18)}
+.card.done{opacity:.86}
+.card:hover{border-color:var(--border-hi);opacity:1}
 .ep-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ep-left{display:flex;align-items:center;gap:6px}
 .ep-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:rgba(229,164,70,.14);color:var(--accent);border:1px solid rgba(229,164,70,.35)}
+.status-pill{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid}
+.status-pill.done{background:rgba(52,199,89,.14);color:var(--ok);border-color:rgba(52,199,89,.35)}
+.status-pill.todo{background:rgba(229,164,70,.18);color:var(--accent);border-color:rgba(229,164,70,.45)}
 .ep-date{font-size:12px;color:var(--muted)}
 .ep-title{font-size:19px;font-weight:700;margin:0}
 .ep-en{font-size:12.5px;color:var(--muted);margin-top:2px}
@@ -55,7 +69,7 @@ footer a{color:var(--sky);text-decoration:none}
     <div>
       <div class="kicker">🎬 Thai Short-Film Studio</div>
       <h1>ศูนย์รวม Production Dashboard</h1>
-      <p class="sub">หนังสั้น AI ภาษาไทย 15 ฉาก × 10.00 วิ (9:16, 24fps) — กดเปิดดูและ Copy Prompt บนมือถือได้ทันที</p>
+      <p class="sub">หนังสั้น AI ภาษาไทย 15 ฉาก × 10.00 วิ (9:16, 24fps) — เปิด Copy Prompt บนมือถือได้ทันที</p>
     </div>
     <div style="display:flex;gap:8px;align-items:center">
       <a class="btn" href="https://drive.google.com/drive/folders/1TZlFs9Xm-WFaql5vkyqUbdoEeTx5RwJj" target="_blank" rel="noopener">📁 Google Drive</a>
@@ -63,10 +77,51 @@ footer a{color:var(--sky);text-decoration:none}
     </div>
   </header>
 
-  <main class="grid">
-    <article class="card">
+  <section class="summary">
+    <div class="pwrap">
+      <div class="pmeta">
+        <span id="prog-label">ผลิตแล้ว 3 / 4 ตอน (75%)</span>
+        <span style="color:var(--accent)">คงค้างพร้อมทำ: EP 04</span>
+      </div>
+      <div class="pbar"><span id="prog-fill" style="width:75%"></span></div>
+    </div>
+    <div class="filters">
+      <button class="fbtn active" data-f="all">ทั้งหมด (4)</button>
+      <button class="fbtn" data-f="todo">🎬 รอผลิต (1)</button>
+      <button class="fbtn" data-f="done">✅ ทำแล้ว (3)</button>
+    </div>
+  </section>
+
+  <main class="grid" id="grid">
+    <article class="card todo" data-status="todo">
       <div class="ep-row">
-        <span class="ep-badge">EP 01</span>
+        <div class="ep-left">
+          <span class="ep-badge">EP 04</span>
+          <span class="status-pill todo">🎬 รอผลิต</span>
+        </div>
+        <span class="ep-date">26 พ.ย. 2569</span>
+      </div>
+      <div>
+        <h2 class="ep-title">เรือเก็บกระทงตีสี่</h2>
+        <div class="ep-en">THE 4 AM KRATHONG BOAT</div>
+      </div>
+      <p class="ep-desc">คืนเก็บกระทงกว่า 4 แสนใบ ลูกชายอายอาชีพแม่จนเห็นแม่ยอมงมคืนแหวนแต่งงานให้หญิงชราโดยไม่รับเงินรางวัล</p>
+      <div class="meta">
+        <span class="tag">15 ฉาก • 150 วิ</span>
+        <span class="tag">Copy Studio</span>
+      </div>
+      <div class="actions">
+        <a class="btn primary" href="./ep04_krathong_boat.html">🚀 เปิด Dashboard</a>
+        <a class="btn" href="https://drive.google.com/drive/folders/1pZ8vGs36EDluAg4pZLfkBKjm6C6DZwGJ" target="_blank" rel="noopener">📂 Drive</a>
+      </div>
+    </article>
+
+    <article class="card done" data-status="done">
+      <div class="ep-row">
+        <div class="ep-left">
+          <span class="ep-badge">EP 01</span>
+          <span class="status-pill done">✅ ทำแล้ว</span>
+        </div>
         <span class="ep-date">23 พ.ย. 2569</span>
       </div>
       <div>
@@ -85,9 +140,12 @@ footer a{color:var(--sky);text-decoration:none}
       </div>
     </article>
 
-    <article class="card">
+    <article class="card done" data-status="done">
       <div class="ep-row">
-        <span class="ep-badge">EP 02</span>
+        <div class="ep-left">
+          <span class="ep-badge">EP 02</span>
+          <span class="status-pill done">✅ ทำแล้ว</span>
+        </div>
         <span class="ep-date">24 พ.ย. 2569</span>
       </div>
       <div>
@@ -105,9 +163,12 @@ footer a{color:var(--sky);text-decoration:none}
       </div>
     </article>
 
-    <article class="card">
+    <article class="card done" data-status="done">
       <div class="ep-row">
-        <span class="ep-badge">EP 03</span>
+        <div class="ep-left">
+          <span class="ep-badge">EP 03</span>
+          <span class="status-pill done">✅ ทำแล้ว</span>
+        </div>
         <span class="ep-date">26 พ.ย. 2569</span>
       </div>
       <div>
@@ -124,26 +185,6 @@ footer a{color:var(--sky);text-decoration:none}
         <a class="btn" href="https://drive.google.com/drive/folders/1cZlbcO_zwxX9bGkf-qrqifssHdWdY6h9" target="_blank" rel="noopener">📂 Drive</a>
       </div>
     </article>
-
-    <article class="card">
-      <div class="ep-row">
-        <span class="ep-badge">EP 04</span>
-        <span class="ep-date">26 พ.ย. 2569</span>
-      </div>
-      <div>
-        <h2 class="ep-title">เรือเก็บกระทงตีสี่</h2>
-        <div class="ep-en">THE 4 AM KRATHONG BOAT</div>
-      </div>
-      <p class="ep-desc">คืนเก็บกระทงกว่า 4 แสนใบ ลูกชายอายอาชีพแม่จนเห็นแม่ยอมงมคืนแหวนแต่งงานให้หญิงชราโดยไม่รับเงินรางวัล</p>
-      <div class="meta">
-        <span class="tag">15 ฉาก • 150 วิ</span>
-        <span class="tag">Copy Studio</span>
-      </div>
-      <div class="actions">
-        <a class="btn primary" href="./ep04_krathong_boat.html">🚀 เปิด Dashboard</a>
-        <a class="btn" href="https://drive.google.com/drive/folders/1pZ8vGs36EDluAg4pZLfkBKjm6C6DZwGJ" target="_blank" rel="noopener">📂 Drive</a>
-      </div>
-    </article>
   </main>
 
   <footer>
@@ -158,6 +199,14 @@ btn.onclick = () => {
   document.body.classList.toggle("light");
   localStorage.setItem("tss_portal_theme", document.body.classList.contains("light") ? "light" : "dark");
 };
+document.querySelectorAll(".fbtn").forEach(b => b.onclick = () => {
+  document.querySelectorAll(".fbtn").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  const f = b.dataset.f;
+  document.querySelectorAll(".card").forEach(c => {
+    c.style.display = (f === "all" || c.dataset.status === f) ? "" : "none";
+  });
+});
 </script>
 </body>
 </html>
